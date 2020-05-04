@@ -5,13 +5,6 @@
 #include <stdlib.h>
 #include <string.h>
 #include <stdbool.h>
-void valid();
-void showString();
-void showToken(char *);
-void showCommentToken();
-void showIntToken(char *,int);
-void printSeqError();
-void printStringWillegalChar();
 %}
 
 %option yylineno
@@ -19,210 +12,40 @@ void printStringWillegalChar();
 CRLF                (\r\n)
 CR                  (\r)
 LF                  (\n)
-newline             ([{CR}{LF}{CRLF}])
-digit               ([0-9])
-letter              ([a-zA-Z])
-word                ([0-9a-zA-Z])
-binInt              (0b([01]+))
-exp                 ([eE][-+]{digit}+)
-fp                  ([pP][-+]{digit}+)
-decReal             ([0-9]*\.((e-[0-9]+)|(E\+[0-9]+)|[0-9]*))
-printable           ([\x09\x0A\x0D\x20-\x7E])
-printableWoNewLine  ([\x09\x20-\x7E])
-printableWoSlash    ([\x09\x0A\x0D\x20-\x2E\x30-\x7E])
-printableWoBSlash   ([\x09\x0A\x0D\x20-\x5B\x5D-\x7E])
-printableWoAsterisk ([\x09\x0A\x0D\x20-\x29\x2B-\x7E])
-printableWou        ([\x20-\x74\x76-\x7E])
 printableComment    ({printableWoSlash}|[\x2F]+{printableWoAsterisk})
 badNestedComment    ((\/\*)([\x09\x0A\x0D\x20-\x2E\x30-\x7E]|[\x2F]+[\x09\x0A\x0D\x20-\x29\x2B-\x7E])*(\/\*))
-escapeSeq           ((\\\")|(\\\\)|(\\n)|(\\r)|(\\t))
 %%
 
-void                                                                  valid();
-int                                                                   valid();
-byte                                                                  valid();
-b                                                                     valid();
-bool                                                                  valid();
-and                                                                   valid();
-or                                                                    valid();
-not                                                                   valid();
-true                                                                  valid();
-false                                                                 valid();
-return                                                                valid();
-if                                                                    valid();
-else                                                                  valid();
-while                                                                 valid();
-break                                                                 valid();
-continue                                                              valid();
-;                                                                     valid();
-,                                                                     valid();
-(                                                                     valid();
-)                                                                     valid();
-{                                                                     valid();
-}                                                                     valid();
-=                                                                     valid();
-==|!=|>=|<=|<|>                                                       valid();
-[a-zA-Z][a-zA-Z0-9]*                                                  valid();
-\+|-|\*|\/                                                            valid();
-0|[1-9][0-9]*                                                         valid();
-\"([^\n\r\"\\]|\\[rnt"\\])+\"                                         valid();
-
-
-{letter}{word}*|\_({digit}|{letter})+                                 showToken("ID");
-{binInt}                                                              showIntToken("BIN_INT",2);
-0o([0-7]+)                                                            showIntToken("OCT_INT",8);
-{digit}+                                                              showIntToken("DEC_INT",10);
-0x([0-9a-fA-F]+)+                                                     showIntToken("HEX_INT",16);
-{digit}*({digit}+\.|\.{digit}+){digit}*{exp}?                         showToken("DEC_REAL");
-0x{word}+(\+|\-){digit}+                                              showToken("HEX_FP");
-(\/\*([^*]|{newline}|(\*+([^*\/]|{newline})))*\*+\/)|(\/\/.*)         showCommentToken();
-{string}                                                              showString();
-\"(([\x20-\x21]|[\x23-\x5B]|[\x5D-\x7E])*\\.+([\x20-\x21]|[\x23-\x5B]|[\x5D-\x7E])*)*\"  printSeqError();
-\"[^\x22]*\"                                                          printStringWillegalChar();
-[\t\n\r ]+                                                            ;
-\"                                                                    printf("Error unclosed string\n");exit(0);
-\/\*                                                                  printf("Error unclosed comment\n");exit(0);
+void                                                                  {return (VOID)}
+int                                                                   {return (INT)}
+byte                                                                  {return (BYTE)}
+b                                                                     {return (B)}
+bool                                                                  {return (BOOL)}
+and                                                                   {return (AND)}
+or                                                                    {return (OR)}
+not                                                                   {return (NOT)}
+true                                                                  {return (TRUE)}
+false                                                                 {return (FALSE)}
+return                                                                {return (RETURN)}
+if                                                                    {return (IF)}
+else                                                                  {return (ELSE)}
+while                                                                 {return (WHILE)}
+break                                                                 {return (BREAK)}
+continue                                                              {return (CONTINUE)}
+;                                                                     {return (SC)}
+,                                                                     {return (COMMA)}
+(                                                                     {return (LPAREN)}
+)                                                                     {return (RPAREN)}
+{                                                                     {return (LBRACE)}
+}                                                                     {return (RBRACE)}
+=                                                                     {return (ASSIGN)}
+==|!=|>=|<=|<|>                                                       {return (RELOP)}
+[a-zA-Z][a-zA-Z0-9]*                                                  {return (BINOP)}
+\+|-|\*|\/                                                            {return (ID)}
+0|[1-9][0-9]*                                                         {return (NUM)}
+\"([^\n\r\"\\]|\\[rnt"\\])+\"                                         {return (STRING)}
 <<EOF>>                                                               exit(0);
 .                                                                     printf("Error %s\n", yytext);exit(0);
 %%
 
-bool isPrintable (char curr) {
-  return (0x20 <= curr && curr <= 0x7E) || curr == 0x09 || curr == 0x0A || curr == 0x0D;
-}
 
-void showToken(char * token) { printf("%d %s %s\n", yylineno, token, yytext); }
-
-void showIntToken(char * name,int base){
-  char *buff=yytext;
-  if (base!=10) buff+=2;
-  int num = strtol(buff,NULL,base);
-  printf("%d %s %d\n",yylineno,name,num);
-}
-
-void showCommentToken(){
-  int count = 1;
-  if (yytext[1] == '*') {
-    for(int i=2; i < strlen(yytext)-2; i++) {
-      char curr = yytext[i];
-      char next = yytext[i+1];
-      if (curr==0xA) count++;
-      if (curr==0xD) {
-        count++;
-        if (curr==0xA) i++;
-      }
-      if (!isPrintable(curr)) {
-        printf("Error %c\n", curr);
-        exit(0);
-      }
-      if (curr=='/' && next=='*') {
-        printf("Warning nested comment\n");
-        exit(0);
-      }
-    }
-  } else { // Single line comment
-      for(int i=2; i < strlen(yytext)-2; i++) {
-        char curr = yytext[i];
-        if (!isPrintable(curr)) {
-          printf("Error %c\n", curr);
-          exit(0);
-        }
-      }
-  }
-  printf("%d COMMENT %d\n",yylineno , count);
-}
-
-void showString(){
-  int countDigits=0;
-  char* copyString;
-  char manipulatedString[1026]={'\0'};
-  int manipulatedStringIndex=0;
-  int digitsIterator=0;
-  int escapeSeqNumber;
-  char escapeBuffer[1024];
-
-  for(int i=1;i<yyleng-1;i++){
-    if(yytext[i]=='\n' || yytext[i]=='\r'){ printf("Error unclosed string\n"); exit(0); }
-    if (yytext[i]=='\\') {
-      i++;
-      switch(yytext[i]) {
-        case 'n': manipulatedString[manipulatedStringIndex]='\n'; break;
-        case 'r': manipulatedString[manipulatedStringIndex]='\r'; break;
-        case 't': manipulatedString[manipulatedStringIndex]='\t'; break;
-        case '\\': manipulatedString[manipulatedStringIndex]='\\'; break;
-        case '"': manipulatedString[manipulatedStringIndex]='\"'; break;
-        case 'u':// handle /u{num}
-          for (digitsIterator=i+2; yytext[digitsIterator] != '}'; digitsIterator++) {
-
-
-            countDigits++;
-            if (countDigits > 6){
-                printf("Error undefined escape sequence u\n");
-                exit(0);
-            }
-          }
-            countDigits=0;
-            char hexNum[1024]={'\0'};
-            strncpy(hexNum,yytext+i+2,digitsIterator-i-2);
-            escapeSeqNumber=strtol(hexNum, NULL, 16);
-            if(escapeSeqNumber>0x7E || escapeSeqNumber<0x20){
-              printf("Error undefined escape sequence u\n");
-              exit(0);
-            }
-            manipulatedString[manipulatedStringIndex]=escapeSeqNumber;
-            i=digitsIterator;
-            break;
-      } //end of switch
-    } else {
-      manipulatedString[manipulatedStringIndex]=yytext[i];
-    }
-  manipulatedStringIndex++;
-}
-
-printf("%d STRING %s\n", yylineno, manipulatedString);
-}
-
-
-void printSeqError() {
-  int j=0;
-  for (int i=0 ; i < yyleng-1; i++) {
-    if (yytext[i]=='\\') {
-      i++;
-      switch (yytext[i]) {
-        case 'n': break;
-        case 'r': break;
-        case 't': break;
-        case '\\': break;
-        case '"': break;
-        case 'u':
-          for (j=i+2; yytext[j]!='}'; j++) {
-            if (yytext[j] < '0' ||
-                (yytext[j] > '9' && yytext[j] < 'A') ||
-                (yytext[j] > 'F' && yytext[j] <'a')||
-                (yytext[j] > 'f') ) {
-              printf("Error undefined escape sequence u\n");
-              exit(0);
-            }
-          }
-          char hex_num[1024]={'\0'};
-          strncpy (hex_num, yytext+i+2 ,j-i-2);
-          int num = strtol(hex_num, NULL, 16);
-          if (num > 0x7E || num < 0x20){ printf("Error undefined escape sequence u\n"); exit(0); }
-          i=j;
-          break;
-        default: printf("Error undefined escape sequence %c\n",yytext[i]); exit(0);
-      }
-    }
-  }
-}
-
-void printStringWillegalChar(){
-  if (yytext[yyleng-2]=='\\') { printf("Error unclosed string\n"); exit(0); }
-  for(int i=0 ; i < yyleng-1; i++){
-    if (yytext[i]=='\n' || yytext[i]=='\r') { printf("Error unclosed string\n"); exit(0); }
-      if (!isPrintable(yytext[i])) { printf("Error %c\n", yytext[i]); exit(0); }
-    }
-}
-
-void valid(){
-    return;
-}
