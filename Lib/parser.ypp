@@ -8,13 +8,11 @@
 %}
 
 %token VOID INT BYTE B BOOL AND OR NOT TRUE FALSE RETURN IF ELSE WHILE BREAK CONTINUE SC COMMA LPAREN RPAREN LBRACE
-%token RBRACE ASSIGN RELOP BINOP ID NUM STRING
-%left OR
-%left AND
+%token RBRACE ASSIGN RELOP BINOP ID NUM STRING epsilon
 
 %%
 
-prog : 		bool '\n'		{cout << ($1 ? "true" : "false") << endl; return 0;}
+Program : 		Funcs '\n'		{cout << ($1 ? "true" : "false") << endl; return 0;}
 ;
 
 bool :		FALSE			{$$ = false;}
