@@ -44,8 +44,9 @@ continue                                                              {return (C
 \+|-|\*|\/                                                            {return (ID)}
 0|[1-9][0-9]*                                                         {return (NUM)}
 \"([^\n\r\"\\]|\\[rnt"\\])+\"                                         {return (STRING)}
-<<EOF>>                                                               exit(0);
-.                                                                     printf("Error %s\n", yytext);exit(0);
+[(\r)(\n)(\r\n)(\t)]                                                  {return (epsilon)}
+//[^\r\n]*[\r\n|\r\n]?                                                {return (epsilon)}
+.                                                                     output::errorLex(yylineno);
 %%
 
 
