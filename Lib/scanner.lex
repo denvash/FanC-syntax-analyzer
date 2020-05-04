@@ -19,53 +19,38 @@ void printStringWillegalChar();
 CRLF                (\r\n)
 CR                  (\r)
 LF                  (\n)
-newline             ([{CR}{LF}{CRLF}])
-digit               ([0-9])
-letter              ([a-zA-Z])
-word                ([0-9a-zA-Z])
-binInt              (0b([01]+))
-exp                 ([eE][-+]{digit}+)
-fp                  ([pP][-+]{digit}+)
-decReal             ([0-9]*\.((e-[0-9]+)|(E\+[0-9]+)|[0-9]*))
-printable           ([\x09\x0A\x0D\x20-\x7E])
-printableWoNewLine  ([\x09\x20-\x7E])
-printableWoSlash    ([\x09\x0A\x0D\x20-\x2E\x30-\x7E])
-printableWoBSlash   ([\x09\x0A\x0D\x20-\x5B\x5D-\x7E])
-printableWoAsterisk ([\x09\x0A\x0D\x20-\x29\x2B-\x7E])
-printableWou        ([\x20-\x74\x76-\x7E])
 printableComment    ({printableWoSlash}|[\x2F]+{printableWoAsterisk})
 badNestedComment    ((\/\*)([\x09\x0A\x0D\x20-\x2E\x30-\x7E]|[\x2F]+[\x09\x0A\x0D\x20-\x29\x2B-\x7E])*(\/\*))
-escapeSeq           ((\\\")|(\\\\)|(\\n)|(\\r)|(\\t))
 %%
 
-void                                                                  valid();
-int                                                                   valid();
-byte                                                                  valid();
-b                                                                     valid();
-bool                                                                  valid();
-and                                                                   valid();
-or                                                                    valid();
-not                                                                   valid();
-true                                                                  valid();
-false                                                                 valid();
-return                                                                valid();
-if                                                                    valid();
-else                                                                  valid();
-while                                                                 valid();
-break                                                                 valid();
-continue                                                              valid();
-;                                                                     valid();
-,                                                                     valid();
-(                                                                     valid();
-)                                                                     valid();
-{                                                                     valid();
-}                                                                     valid();
-=                                                                     valid();
-==|!=|>=|<=|<|>                                                       valid();
-[a-zA-Z][a-zA-Z0-9]*                                                  valid();
-\+|-|\*|\/                                                            valid();
-0|[1-9][0-9]*                                                         valid();
-\"([^\n\r\"\\]|\\[rnt"\\])+\"                                         valid();
+void                                                                  {return (VOID)}
+int                                                                   {return (INT)}
+byte                                                                  {return (BYTE)}
+b                                                                     {return (B)}
+bool                                                                  {return (BOOL)}
+and                                                                   {return (AND)}
+or                                                                    {return (OR)}
+not                                                                   {return (NOT)}
+true                                                                  {return (TRUE)}
+false                                                                 {return (FALSE)}
+return                                                                {return (RETURN)}
+if                                                                    {return (IF)}
+else                                                                  {return (ELSE)}
+while                                                                 {return (WHILE)}
+break                                                                 {return (BREAK)}
+continue                                                              {return (CONTINUE)}
+;                                                                     {return (SC)}
+,                                                                     {return (COMMA)}
+(                                                                     {return (LPAREN)}
+)                                                                     {return (RPAREN)}
+{                                                                     {return (LBRACE)}
+}                                                                     {return (RBRACE)}
+=                                                                     {return (ASSIGN)}
+==|!=|>=|<=|<|>                                                       {return (RELOP)}
+[a-zA-Z][a-zA-Z0-9]*                                                  {return (BINOP)}
+\+|-|\*|\/                                                            {return (ID)}
+0|[1-9][0-9]*                                                         {return (NUM)}
+\"([^\n\r\"\\]|\\[rnt"\\])+\"                                         {return (STRING)}
 
 
 {letter}{word}*|\_({digit}|{letter})+                                 showToken("ID");
