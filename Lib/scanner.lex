@@ -1,4 +1,6 @@
 %{
+#include "output.hpp"
+#include "output.tab.hpp"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
