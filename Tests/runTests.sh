@@ -3,10 +3,7 @@
 workspace=$(pwd)
 parserFolder=${workspace}
 
-lex ${parserFolder}/swift-lexical-analyzer.lex
-gcc -ll ${workspace}/lex.yy.c
-
-app=./a.out
+app=../Lib/parser
 
 # ./a.out < ../Tests/in/*.in > ../Tests/res/*.res
 
