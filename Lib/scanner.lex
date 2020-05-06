@@ -12,8 +12,7 @@
 CRLF                (\r\n)
 CR                  (\r)
 LF                  (\n)
-printableComment    ({printableWoSlash}|[\x2F]+{printableWoAsterisk})
-badNestedComment    ((\/\*)([\x09\x0A\x0D\x20-\x2E\x30-\x7E]|[\x2F]+[\x09\x0A\x0D\x20-\x29\x2B-\x7E])*(\/\*))
+TAB                 (\t)
 %%
 
 void                                                                  {return (VOID)}
@@ -34,19 +33,18 @@ break                                                                 {return (B
 continue                                                              {return (CONTINUE)}
 ;                                                                     {return (SC)}
 ,                                                                     {return (COMMA)}
-(                                                                     {return (LPAREN)}
-)                                                                     {return (RPAREN)}
-{                                                                     {return (LBRACE)}
-}                                                                     {return (RBRACE)}
+\(                                                                    {return (LPAREN)}
+\)                                                                    {return (RPAREN)}
+\{                                                                    {return (LBRACE)}
+\}                                                                    {return (RBRACE)}
 =                                                                     {return (ASSIGN)}
 ==|!=|>=|<=|<|>                                                       {return (RELOP)}
-[a-zA-Z][a-zA-Z0-9]*                                                  {return (BINOP)}
-\+|-|\*|\/                                                            {return (ID)}
+\+|-|\*|\/                                                            {return (BINOP)}
+[a-zA-Z][a-zA-Z0-9]*                                                  {return (ID)}
 0|[1-9][0-9]*                                                         {return (NUM)}
 \"([^\n\r\"\\]|\\[rnt"\\])+\"                                         {return (STRING)}
-[(\r)(\n)(\r\n)(\t)]                                                  {return (epsilon)}
+[{CR}{CRLF}{LF}{TAB}]                                                 {return (epsilon)}
 //[^\r\n]*[\r\n|\r\n]?                                                {return (epsilon)}
+<<EOF>>                                                               exit(0);
 .                                                                     output::errorLex(yylineno);
 %%
-
-
