@@ -1,9 +1,11 @@
 %{
+    #include "parser.hpp"
     #include "output.hpp"
-    #include<iostream>
+
+    #include <iostream>
     using namespace std;
     int yylex();
-
+    void yyerror(char const*);
 %}
 
 %token VOID INT BYTE B BOOL AND OR NOT TRUE FALSE RETURN IF ELSE WHILE BREAK CONTINUE SC COMMA LPAREN RPAREN LBRACE
@@ -11,13 +13,16 @@
 
 %%
 
-Program :      Funcs {output::printProductionRule(0);}
+Program :
+    Funcs                           {output::printProductionRule(0);}
 ;
 
-Funcs :		epsilon			{output::printProductionRule(1);}
-		|   FuncDecl Funcs	{output::printProductionRule(2);}
+Funcs :
+    epsilon                         {output::printProductionRule(1);}
+    |   FuncDecl Funcs              {output::printProductionRule(2);}
 
-FuncDecl:   RetType ID LPAREN Formals RPAREN LBRACE Statements RBRACE {output::printProductionRule(3);}
+FuncDecl:
+     ID LPAREN RPAREN LBRACE RBRACE {output::printProductionRule(3);}
 ;
 
 %%
@@ -27,4 +32,7 @@ int main()
     return yyparse();
 }
 
-void yyerror(char const* s){}
+void yyerror(char const* s){
+    printf("Parse Error: %s\n",s);
+    exit(1);
+}
