@@ -44,5 +44,6 @@ continue                                                              _(CONTINUE
 \"([^\n\r\"\\]|\\[rnt"\\])+\"                                         _(STRING);
 [(\r)(\n)(\r\n)(\t)]                                                  /* ignore */
 "//"[^\r\n]*[\r|\n|\r\n]?                                             /* ignore */
+<<EOF>>                                                               exit(0);
 .                                                                     output::errorLex(yylineno);
 %%
