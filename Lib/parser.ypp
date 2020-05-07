@@ -15,7 +15,6 @@
 %nonassoc RELOP
 %nonassoc BINOP
 %right NOT
-
 %nonassoc ELSE
 
 %%
