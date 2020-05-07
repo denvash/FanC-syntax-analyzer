@@ -5,3 +5,4 @@
 *.tab.cpp
 *.tab.hpp
 build
+*.output
