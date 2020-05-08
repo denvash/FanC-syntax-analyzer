@@ -8,7 +8,7 @@
 #include <stdbool.h>
 
 #define _(TOKEN) {return TOKEN;}
-#define _ERROR(NUM) {output::errorLex(NUM);exit(0);}
+#define _ERROR(NUM) {output::errorLex(NUM);exit(1);}
 %}
 
 %option noyywrap

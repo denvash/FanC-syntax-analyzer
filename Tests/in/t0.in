@@ -1,2 +1,4 @@
 //test
-void printOk(bool isOk) {}
+void printOk(bool isOk) {
+    if (isOk) print("ok");
+}
