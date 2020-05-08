@@ -1,0 +1,6 @@
+6: RetType ->  VOID
+33: Type -> BOOL
+11: FormalDecl -> Type ID
+9: FormalsList -> FormalDecl
+8: Formals -> FormalsList
+Parse Error: syntax error

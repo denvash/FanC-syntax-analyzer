@@ -13,6 +13,11 @@
 
 %option noyywrap
 %option yylineno
+
+CR      (\x0D)
+LF      (\x0A)
+SPACE   (\x20)
+TAB     (\x09)
 %%
 
 void                                                                  _(VOID);
@@ -43,8 +48,7 @@ continue                                                              _(CONTINUE
 [a-zA-Z][a-zA-Z0-9]*                                                  _(ID);
 0|[1-9][0-9]*                                                         _(NUM);
 \"([^\n\r\"\\]|\\[rnt"\\])+\"                                         _(STRING);
-[(\r)(\n)(\r\n)(\t)]                                                  /* ignore */;
+{CR}|{LF}|{TAB}|{SPACE}                                               /* ignore */;
 "//"[^\r\n]*[\r|\n|\r\n]?                                             /* ignore */;
-<<EOF>>                                                               exit(0);
-.                                                                     _ERROR(yylineno);
+.                                                                     {printf("text: %s\n",yytext); _ERROR(yylineno); }
 %%
