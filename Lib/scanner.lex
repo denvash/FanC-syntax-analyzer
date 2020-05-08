@@ -8,6 +8,7 @@
 #include <stdbool.h>
 
 #define _(TOKEN) {return TOKEN;}
+#define _ERROR(NUM) {output::errorLex(NUM);exit(0);}
 %}
 
 %option noyywrap
@@ -45,5 +46,5 @@ continue                                                              _(CONTINUE
 [(\r)(\n)(\r\n)(\t)]                                                  /* ignore */
 "//"[^\r\n]*[\r|\n|\r\n]?                                             /* ignore */
 <<EOF>>                                                               exit(0);
-.                                                                     output::errorLex(yylineno);
+.                                                                     _ERROR(yylineno);
 %%
