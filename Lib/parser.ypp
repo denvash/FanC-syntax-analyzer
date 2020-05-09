@@ -9,8 +9,9 @@
     extern int yylineno;
 %}
 
-%token RPAREN VOID INT BYTE B BOOL TRUE FALSE RETURN IF WHILE BREAK CONTINUE SC COMMA LPAREN LBRACE RBRACE ASSIGN ID NUM STRING
+%token RPAREN VOID INT BYTE B BOOL TRUE FALSE RETURN IF WHILE BREAK CONTINUE SC COMMA LPAREN LBRACE RBRACE ID NUM STRING
 
+%right ASSIGN
 %left OR
 %left AND
 %right NOT
@@ -56,7 +57,7 @@ FormalDecl:
 
 Statements:
     Statement                       {output::printProductionRule(12);}
-    | Statement Statement           {output::printProductionRule(13);}
+    | Statements Statement          {output::printProductionRule(13);}
     | LBRACE Statement RBRACE       {output::printProductionRule(14);}
 ;
 

@@ -6,5 +6,5 @@ clean:
 	rm -f lex.yy.c
 	rm -f parser.tab.*pp
 	rm -f parser
-tree: clean
+tree:
 	bison --verbose --report=itemset parser.ypp
