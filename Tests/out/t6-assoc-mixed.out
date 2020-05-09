@@ -1,0 +1,18 @@
+6: RetType ->  VOID
+7: Formals -> epsilon
+31: Type -> INT
+38: Exp -> NUM
+16: Statement -> Type ID ASSIGN Exp SC
+12: Statements -> Statement
+31: Type -> INT
+38: Exp -> NUM
+16: Statement -> Type ID ASSIGN Exp SC
+13: Statements -> Statements Statement
+31: Type -> INT
+38: Exp -> NUM
+38: Exp -> NUM
+38: Exp -> NUM
+38: Exp -> NUM
+35: Exp -> Exp BINOP Exp
+line 5: syntax error
+syntax error from token: !=

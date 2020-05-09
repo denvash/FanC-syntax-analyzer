@@ -18,6 +18,8 @@ outExt=\.out
 
 totalTests=`ls -1q ${inFolder} | wc -l`
 
+make -C Lib all
+
 # Test Run
 for filePath in ${inFolder}/*.in; do
 #    dos2unix ${filePath}

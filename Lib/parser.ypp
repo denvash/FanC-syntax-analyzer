@@ -8,7 +8,7 @@
     void yyerror(char const*);
     extern int yylineno;
     /* For debugging */
-    // extern char* yytext;
+    extern char* yytext;
 %}
 
 %token VOID INT BYTE B BOOL TRUE FALSE RETURN IF WHILE BREAK CONTINUE SC COMMA LPAREN RPAREN LBRACE RBRACE ID NUM STRING
@@ -19,7 +19,8 @@
 %right NOT
 
 %nonassoc RELOP
-%nonassoc BINOP
+%left PLUS_MINUS
+%left MUL_DIV
 
 %left LEFT
 %nonassoc NOELSE
@@ -81,8 +82,8 @@ Statement:
 ;
 
 Call:
-    ID LPAREN ExpList RPAREN        {output::printProductionRule(27);}
-    |   ID LPAREN RPAREN            {output::printProductionRule(28);}
+    ID LPAREN ExpList RPAREN %prec LEFT        {output::printProductionRule(27);}
+    |   ID LPAREN RPAREN %prec LEFT           {output::printProductionRule(28);}
 ;
 
 ExpList:
@@ -98,7 +99,8 @@ Type:
 
 Exp:
     LPAREN Exp RPAREN %prec LEFT               {output::printProductionRule(34);}
-    | Exp BINOP Exp                 {output::printProductionRule(35);}
+    | Exp MUL_DIV Exp                 {output::printProductionRule(35);}
+    | Exp PLUS_MINUS Exp                 {output::printProductionRule(35);}
     | ID                            {output::printProductionRule(36);}
     | Call                          {output::printProductionRule(37);}
     | NUM                           {output::printProductionRule(38);}
@@ -121,6 +123,6 @@ int main() {
 void yyerror(char const* s) {
     output::errorSyn(yylineno);
     /* For debug */
-    /* cout << "syntax error from token: " << yytext << endl; */
+    cout << "syntax error from token: " << yytext << endl;
     exit(1);
 }
