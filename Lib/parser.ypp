@@ -6,6 +6,7 @@
     using namespace std;
     int yylex();
     void yyerror(char const*);
+    extern int yylineno;
 %}
 
 %token RPAREN VOID INT BYTE B BOOL TRUE FALSE RETURN IF WHILE BREAK CONTINUE SC COMMA LPAREN LBRACE RBRACE ASSIGN ID NUM STRING
@@ -113,8 +114,6 @@ int main() {
 }
 
 void yyerror(char const* s) {
-    /* TODO: make a global variable for line number */
-    /* output::errorSyn(1); */
-    cout << "Parse error, printing the message: "<< s << endl;
+    output::errorSyn(yylineno);
     exit(1);
 }

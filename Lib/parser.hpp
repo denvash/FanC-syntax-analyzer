@@ -1,6 +1,10 @@
 #ifndef PARSER
 #define PARSER
 
-#define YYSTYPE bool
+typedef union {
+    int line;
+} u;
+
+#define YYSTYPE u
 
 #endif

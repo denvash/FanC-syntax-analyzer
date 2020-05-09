@@ -20,5 +20,4 @@
 39: Exp -> NUM B
 16: Statement -> Type ID ASSIGN Exp SC
 13: Statements -> Statements Statement
-line 1: syntax error
-Parse error: syntax error
+line 10: syntax error
