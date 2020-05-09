@@ -3,7 +3,7 @@
 workspace=$(pwd)
 parserFolder=${workspace}
 
-app=../Lib/parser
+app=Lib/parser
 
 # ./a.out < ../Tests/in/*.in > ../Tests/res/*.res
 

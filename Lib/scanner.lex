@@ -38,11 +38,11 @@ break                                                                 _(BREAK);
 continue                                                              _(CONTINUE);
 ;                                                                     _(SC);
 ,                                                                     _(COMMA);
-\(                                                                    _(LPAREN);
-\)                                                                    _(RPAREN);
-\{                                                                    _(LBRACE);
-\}                                                                    _(RBRACE);
-=                                                                     _(ASSIGN);
+"("                                                                    _(LPAREN);
+")"                                                                    _(RPAREN);
+"{"                                                                    _(LBRACE);
+"}"                                                                    _(RBRACE);
+"="                                                                     _(ASSIGN);
 ==|!=|>=|<=|<|>                                                       _(RELOP);
 \+|-|\*|\/                                                            _(BINOP);
 [a-zA-Z][a-zA-Z0-9]*                                                  _(ID);
@@ -50,5 +50,5 @@ continue                                                              _(CONTINUE
 \"([^\n\r\"\\]|\\[rnt"\\])+\"                                         _(STRING);
 {CR}|{LF}|{TAB}|{SPACE}                                               /* ignore */;
 "//"[^\r\n]*[\r|\n|\r\n]?                                             /* ignore */;
-.                                                                     {printf("text: %s\n",yytext); _ERROR(yylineno); }
+.                                                                     _ERROR(yylineno);
 %%

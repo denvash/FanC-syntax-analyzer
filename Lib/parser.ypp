@@ -7,9 +7,11 @@
     int yylex();
     void yyerror(char const*);
     extern int yylineno;
+    /* For debug */
+    // extern char* yytext;
 %}
 
-%token RPAREN VOID INT BYTE B BOOL TRUE FALSE RETURN IF WHILE BREAK CONTINUE SC COMMA LPAREN LBRACE RBRACE ID NUM STRING
+%token VOID INT BYTE B BOOL TRUE FALSE RETURN IF WHILE BREAK CONTINUE SC COMMA LPAREN RPAREN LBRACE RBRACE ID NUM STRING
 
 %right ASSIGN
 %left OR
@@ -18,6 +20,8 @@
 
 %nonassoc RELOP
 %nonassoc BINOP
+
+%left LEFT
 %nonassoc NOELSE
 %nonassoc ELSE
 
@@ -58,11 +62,11 @@ FormalDecl:
 Statements:
     Statement                       {output::printProductionRule(12);}
     | Statements Statement          {output::printProductionRule(13);}
-    | LBRACE Statement RBRACE       {output::printProductionRule(14);}
 ;
 
 Statement:
-    Type ID SC                      {output::printProductionRule(15);}
+    LBRACE Statements RBRACE       {output::printProductionRule(14);}
+    | Type ID SC                      {output::printProductionRule(15);}
     | Type ID ASSIGN Exp SC         {output::printProductionRule(16);}
     | ID ASSIGN Exp SC              {output::printProductionRule(17);}
     | Call SC                       {output::printProductionRule(18);}
@@ -93,7 +97,7 @@ Type:
 ;
 
 Exp:
-    LPAREN Exp RPAREN               {output::printProductionRule(34);}
+    LPAREN Exp RPAREN %prec LEFT               {output::printProductionRule(34);}
     | Exp BINOP Exp                 {output::printProductionRule(35);}
     | ID                            {output::printProductionRule(36);}
     | Call                          {output::printProductionRule(37);}
@@ -116,5 +120,7 @@ int main() {
 
 void yyerror(char const* s) {
     output::errorSyn(yylineno);
+    /* For debug */
+    /* cout << "syntax error from token: " << yytext << endl; */
     exit(1);
 }
