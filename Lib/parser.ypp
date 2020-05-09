@@ -7,7 +7,7 @@
     int yylex();
     void yyerror(char const*);
     extern int yylineno;
-    /* For debug */
+    /* For debugging */
     // extern char* yytext;
 %}
 
