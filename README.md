@@ -1,3 +1,49 @@
+# Slim - FanC Syntax Analyzer
+
+## Usage
+
+```bash
+# Library Dir
+cd Lib
+
+# Build parser
+make all
+
+# Input FanC program
+parser < input.in > output.out
+```
+
+## Testing
+
+Use `Test/in` folder for input files and `Test/res` for expecting results.
+
+```bash
+# Run Tests
+./Tests/runTests.sh
+```
+
+## Example
+
+Input FanC program to be analyzed:
+
+```java
+// Skip comment
+void printOk(bool isOk) {
+    if (isOk) print("ok");
+}
+
+void main()
+{
+    int x = 4;
+    byte y = 100 b;
+    printOk(x>y);
+    int z;
+}
+```
+
+Outputs:
+
+```text
 6: RetType ->  VOID
 33: Type -> BOOL
 11: FormalDecl -> Type ID
@@ -36,4 +82,4 @@
 3: Funcs -> FuncDecl Funcs
 3: Funcs -> FuncDecl Funcs
 1: Program -> Funcs
-line 12: syntax error
+```
