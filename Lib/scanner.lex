@@ -7,8 +7,8 @@
 #include <string.h>
 #include <stdbool.h>
 
-#define _(TOKEN) {return TOKEN;}
-#define _ERROR(NUM) {output::errorLex(NUM);exit(0);}
+#define _(TOKEN) { return TOKEN; }
+#define _ERROR(NUM) { output::errorLex(NUM); exit(0); }
 %}
 
 %option noyywrap
@@ -43,7 +43,8 @@ continue                                                              _(CONTINUE
 "{"                                                                   _(LBRACE);
 "}"                                                                   _(RBRACE);
 "="                                                                   _(ASSIGN);
-==|!=|>=|<=|<|>                                                       _(RELOP);
+>=|<=|<|>                                                             _(RELOP);
+==|!=                                                                 _(EQ_RELOP);
 \+|-                                                                  _(PLUS_MINUS)
 \*|\/                                                                 _(MUL_DIV)
 [a-zA-Z][a-zA-Z0-9]*                                                  _(ID);
