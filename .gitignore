@@ -6,3 +6,4 @@
 *.tab.hpp
 build
 *.output
+parser

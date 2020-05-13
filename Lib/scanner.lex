@@ -1,5 +1,4 @@
 %{
-#include "parser.hpp"
 #include "parser.tab.hpp"
 #include "output.hpp"
 #include <stdio.h>
@@ -38,11 +37,11 @@ break                                                                 _(BREAK);
 continue                                                              _(CONTINUE);
 ;                                                                     _(SC);
 ,                                                                     _(COMMA);
-"("                                                                   _(LPAREN);
-")"                                                                   _(RPAREN);
-"{"                                                                   _(LBRACE);
-"}"                                                                   _(RBRACE);
-"="                                                                   _(ASSIGN);
+\(                                                                    _(LPAREN);
+\)                                                                    _(RPAREN);
+\{                                                                    _(LBRACE);
+\}                                                                    _(RBRACE);
+=                                                                     _(ASSIGN);
 >=|<=|<|>                                                             _(RELOP);
 ==|!=                                                                 _(EQ_RELOP);
 \+|-                                                                  _(PLUS_MINUS)

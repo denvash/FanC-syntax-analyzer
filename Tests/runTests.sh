@@ -41,7 +41,8 @@ for filePath in ${outFolder}/*.out; do
 
     result=`diff ${filePath} ${resultFolder}/${fileName}${outExt}`
     if [[ "${result}" != "" ]]; then
-        echo -e "\e[35m${result}"
+        # Print result
+        # echo -e "\e[35m${result}"
         echo -e "\e[91mTest ${fileName} FAILED"
         exit 1
     fi
